@@ -24,7 +24,6 @@ function UploadPredict() {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
 
-    // ✅ Fallback: allow only images
     if (!selectedFile.type.startsWith("image/")) {
       setSnackbar({
         open: true,
@@ -34,7 +33,6 @@ function UploadPredict() {
       return;
     }
 
-    // ✅ Optional: size limit (e.g. 5MB)
     if (selectedFile.size > 5 * 1024 * 1024) {
       setSnackbar({
         open: true,
@@ -44,11 +42,10 @@ function UploadPredict() {
       return;
     }
 
-  setFile(selectedFile);
-  setPreview(URL.createObjectURL(selectedFile));
-  setResult(null);
-};
-
+    setFile(selectedFile);
+    setPreview(URL.createObjectURL(selectedFile));
+    setResult(null);
+  };
 
   const handleUpload = async () => {
     if (!file) return;
@@ -57,9 +54,11 @@ function UploadPredict() {
     formData.append("file", file);
 
     try {
-      const res = await axios.post("https://brain-tumor-detection-backend-2dxf.onrender.com/predict", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await axios.post(
+        "https://brain-tumor-detection-backend-2dxf.onrender.com/predict",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
       setResult(res.data);
       setHistory((prev) => [
         ...prev,
@@ -80,16 +79,25 @@ function UploadPredict() {
   };
 
   return (
-    <Box textAlign="center" sx={{ padding: 3, borderRadius: 2 }}>
+    <Box
+      textAlign="center"
+      sx={{
+        padding: { xs: 2, md: 3 },
+        borderRadius: 2,
+        width: "100%",
+        maxWidth: { xs: "100%", md: "700px" },
+        margin: "0 auto",
+      }}
+    >
       {/* Upload Zone */}
       <motion.div
         whileHover={{ scale: 1.03 }}
         style={{
           border: "2px dashed #1976d2",
           borderRadius: "12px",
-          padding: "20px",
+          padding: "16px",
           backgroundColor: "inherit",
-          maxWidth: "100%",
+          width: "100%",
           margin: "0 auto",
         }}
       >
@@ -101,7 +109,11 @@ function UploadPredict() {
           id="fileInput"
         />
         <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
-          <Typography variant="h6" color="primary">
+          <Typography
+            variant="h6"
+            color="primary"
+            sx={{ fontSize: { xs: "1rem", md: "1.25rem" } }}
+          >
             Drag & Drop or Click to Upload MRI Image
           </Typography>
         </label>
@@ -114,8 +126,8 @@ function UploadPredict() {
             src={preview}
             alt="preview"
             style={{
-              maxWidth: "100%",
-              maxHeight: "300px",
+              width: "100%",
+              height: "auto",
               borderRadius: "10px",
               boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
             }}
@@ -130,41 +142,30 @@ function UploadPredict() {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        gap={2}
+        gap={{ xs: 1, md: 2 }}
         mt={3}
         flexWrap="wrap"
       >
-        {/* Animated Brain Character */}
         <motion.img
-          src="/brain-pointer.png" // ✅ Make sure this is in public/
+          src="/brain-pointer.png"
           alt="brain pointing"
-          style={{
-            width: "100px",
-            pointerEvents: "none",
-          }}
-          animate={{
-            rotate: [0, -5, 0, 5, 0],
-            scale: [1, 1.05, 1],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          style={{ width: "80px", pointerEvents: "none" }}
+          animate={{ rotate: [0, -5, 0, 5, 0], scale: [1, 1.05, 1] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        {/* Upload Button */}
         <Button
           variant="contained"
           color="primary"
           onClick={handleUpload}
           disabled={loading}
+          sx={{ width: { xs: "100%", sm: "auto" } }} // full width button on mobile
         >
           Upload & Predict
         </Button>
       </Box>
 
-      {loading && <LinearProgress style={{ marginTop: 10 }} />}
+      {loading && <LinearProgress sx={{ mt: 2 }} />}
 
       {/* Result */}
       {result && (
@@ -173,11 +174,9 @@ function UploadPredict() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <Card style={{ marginTop: 20 }}>
+          <Card sx={{ mt: 2 }}>
             <CardContent>
-              <Typography variant="h5">
-                {result.label || result.error}
-              </Typography>
+              <Typography variant="h5">{result.label || result.error}</Typography>
               {result.probability && (
                 <>
                   <Typography>
@@ -186,7 +185,7 @@ function UploadPredict() {
                   <LinearProgress
                     variant="determinate"
                     value={result.probability * 100}
-                    style={{ marginTop: 10 }}
+                    sx={{ mt: 1 }}
                   />
                 </>
               )}
@@ -207,9 +206,7 @@ function UploadPredict() {
                 <Typography variant="subtitle1">
                   {item.filename} — {item.time}
                 </Typography>
-                <Typography variant="body2">
-                  {item.label || item.error}
-                </Typography>
+                <Typography variant="body2">{item.label || item.error}</Typography>
                 {item.probability && (
                   <Typography variant="body2">
                     Probability: {(item.probability * 100).toFixed(2)}%
@@ -221,7 +218,7 @@ function UploadPredict() {
         </Box>
       )}
 
-      {/* Snackbar for toast notifications */}
+      {/* Snackbar */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3000}
