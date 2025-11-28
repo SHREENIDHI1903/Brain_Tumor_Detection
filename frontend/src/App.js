@@ -51,14 +51,13 @@ function App() {
           </Box>
 
           {/* Heading */}
-          <Typography
+                  <Typography
             variant="h3"
             component="h1"
             sx={{
-              fontSize: { xs: "2rem", sm: "2.5rem" },
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
+              fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" }, // responsive sizes
+              whiteSpace: "normal",   // ✅ allow wrapping
+              wordBreak: "break-word", // ✅ break long words if needed
               color: "primary.main",
               textAlign: "center",
               marginBottom: "30px",
@@ -66,6 +65,7 @@ function App() {
           >
             🧠 BRAIN TUMOR DETECTION
           </Typography>
+
 
           {/* UploadPredict component */}
           <UploadPredict />
