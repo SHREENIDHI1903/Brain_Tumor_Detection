@@ -1,0 +1,8 @@
+# requirements.txt
+fastapi
+uvicorn[standard]
+python-multipart
+tensorflow
+numpy
+pillow
+starlette
