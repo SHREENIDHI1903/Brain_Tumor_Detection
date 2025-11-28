@@ -57,7 +57,7 @@ function UploadPredict() {
     formData.append("file", file);
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/predict", formData, {
+      const res = await axios.post("https://brain-tumor-detection-backend-2dxf.onrender.com", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setResult(res.data);
